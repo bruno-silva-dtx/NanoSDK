@@ -1,12 +1,7 @@
-lxbuild
-winbuild
-wbuild
 .cache
 .vs
 .vscode/.cmaketools.json
 .vscode
 .idea
 .DS_Store
-etc/nng.sublime-workspace
-cmake-build-*
 docs/**/*.html
