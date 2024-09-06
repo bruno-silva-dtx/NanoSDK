@@ -1,7 +1,1 @@
-.cache
-.vs
-.vscode/.cmaketools.json
-.vscode
-.idea
-.DS_Store
-docs/**/*.html
+
