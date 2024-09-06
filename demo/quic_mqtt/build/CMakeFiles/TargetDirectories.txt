@@ -1,0 +1,3 @@
+/home/dtx/Desktop/NanoSDK/demo/quic_mqtt/build/CMakeFiles/quic_client.dir
+/home/dtx/Desktop/NanoSDK/demo/quic_mqtt/build/CMakeFiles/edit_cache.dir
+/home/dtx/Desktop/NanoSDK/demo/quic_mqtt/build/CMakeFiles/rebuild_cache.dir
