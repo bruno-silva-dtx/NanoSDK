@@ -192,7 +192,7 @@ sendmsg_func(void *arg)
 }
 
 int
-client(int type, const char *url, const char *qos, const char *topic, const char *data, char* msg_intervalo)
+client(int type, const char *url, const char *qos, const char *topic, const char *data)
 {
 	nng_socket  sock;
 	int         rv, sz, q;
@@ -256,7 +256,8 @@ client(int type, const char *url, const char *qos, const char *topic, const char
 		printf("Unknown command.\n");
 	}
 
-	nng_msleep(atoi(msg_intervalo));
+	
+	nng_msleep(1000);
 
 	nng_close(sock);
 	fprintf(stderr, "Done.\n");
@@ -264,28 +265,12 @@ client(int type, const char *url, const char *qos, const char *topic, const char
 	return (0);
 }
 
-const char* create_payload(int size) {
-    // Aloca memória para o payload
-    char *payload = (char *)malloc(size + 1);
-    if (payload == NULL) {
-        fprintf(stderr, "Erro: Falha ao alocar memória para o payload\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Preenche o payload com 'A's (ou qualquer outro caractere desejado)
-    memset(payload, 'A', size);
-    payload[size] = '\0'; // Adiciona o caractere nulo no final
-
-    return payload;
-}
-
 static void
 printf_helper(char *exec)
 {
 	fprintf(stderr, "Usage: %s conn <url>\n"
 	                "       %s sub  <url> <qos> <topic>\n"
-	                "       %s pub  <url> <qos> <topic>  <size_of_packets> <number_of_packets> <msg_interval>\n", 
-	                exec, exec, exec);
+	                "       %s pub  <url> <qos> <topic> <data>\n", exec, exec, exec);
 	exit(EXIT_FAILURE);
 }
 
@@ -294,26 +279,21 @@ main(int argc, char **argv)
 {
 	int rc;
 
-	printf("Main");
-	fprintf(stderr, "Dentro do for.\n");
-
-
-	for(int i = 0; i <atoi(argv[6]) ;i = i+1){
-		
-		const char* payload = create_payload(atoi(argv[5]));
-		if (0 == strncmp(argv[1], "conn", 4)) {
-			client(CONN, argv[2], NULL, NULL, NULL, argv[7]);
+		if (argc < 3) {
+			goto error;
 		}
-		else if (0 == strncmp(argv[1], "sub", 3) ) {
-			client(SUB, argv[2], argv[3], argv[4], NULL,argv[7]);
+		if (0 == strncmp(argv[1], "conn", 4) && argc == 3) {
+			client(CONN, argv[2], NULL, NULL, NULL);
 		}
-		else if (0 == strncmp(argv[1], "pub", 3) ) {
-			client(PUB, argv[2], argv[3], argv[4],payload,argv[7]);
+		else if (0 == strncmp(argv[1], "sub", 3)  && argc == 5) {
+			client(SUB, argv[2], argv[3], argv[4], NULL);
+		}
+		else if (0 == strncmp(argv[1], "pub", 3)  && argc == 6) {
+			client(PUB, argv[2], argv[3], argv[4], argv[5]);
 		}
 		else {
 			goto error;
 		}
-	}
 
 	return 0;
 
